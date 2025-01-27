@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
   },
   email: {
     type: String,
-    required: [true, "Please provide a email"],
+    required: [true, "Please provide an email"],
     unique: true,
   },
   password: {
@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema({
   },
   age: {
     type: Number,
-    required: [true, "Please provide a age"],
+    required: [true, "Please provide an age"],
   },
   gender: {
     type: String,
@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema({
   genderPreference: {
     type: String,
     required: [true, "Please provide your preference"],
-    enum: ["male", "female", "other"],
+    enum: ["male", "female", "both"], // Updated to include 'both'
   },
   bio: { type: String, default: "" },
   image: { type: String, default: "" },
