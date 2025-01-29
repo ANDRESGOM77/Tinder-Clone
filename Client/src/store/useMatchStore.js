@@ -1,38 +1,40 @@
 import { create } from "zustand";
 import { axiosInstance } from "../lib/axios.js";
 import toast from "react-hot-toast";
+import { getSocket } from "../socket/socket.client.js";
 
 export const useMatchStore = create((set) => ({
-  matches: [],
-  isLoadingMyMatches: false,
-  isLoadingUserProfiles: false,
-  userProfiles: [],
+	matches: [],
+	isLoadingMyMatches: false,
+	isLoadingUserProfiles: false,
+	userProfiles: [],
+	swipeFeedback: null,
 
-  getMyMatches: async () => {
-    try {
-      set({ isLoadingMyMatches: true });
-      const res = await axiosInstance.get("/matches");
-      set({ matches: res.data.matches });
-    } catch (error) {
-      set({ matches: [] });
-      toast.error(error.response.data.message || "Something went wrong");
-    } finally {
-      set({ isLoadingMyMatches: false });
-    }
-  },
+	getMyMatches: async () => {
+		try {
+			set({ isLoadingMyMatches: true });
+			const res = await axiosInstance.get("/matches");
+			set({ matches: res.data.matches });
+		} catch (error) {
+			set({ matches: [] });
+			toast.error(error.response.data.message || "Something went wrong");
+		} finally {
+			set({ isLoadingMyMatches: false });
+		}
+	},
 
-  getUserProfiles: async () => {
-    try {
-      set({ isLoadingUserProfiles: true });
-      const res = await axiosInstance.get("/matches/user-profiles");
-      set({ userProfiles: res.data.users });
-    } catch (error) {
-      set({ userProfiles: [] });
-      toast.error(error.response.data.message || "Something went wrong");
-    } finally {
-      set({ isLoadingUserProfiles: false });
-    }
-  },
+	getUserProfiles: async () => {
+		try {
+			set({ isLoadingUserProfiles: true });
+			const res = await axiosInstance.get("/matches/user-profiles/");
+			set({ userProfiles: res.data.users });
+		} catch (error) {
+			set({ userProfiles: [] });
+			toast.error(error.response.data.message || "Something went wrong");
+		} finally {
+			set({ isLoadingUserProfiles: false });
+		}
+	},
 
 	swipeLeft: async (user) => {
 		try {
@@ -57,4 +59,30 @@ export const useMatchStore = create((set) => ({
 		}
 	},
 
+	subscribeToNewMatches: () => {
+		try {
+			const socket = getSocket();
+
+			socket.on("newMatch", (newMatch) => {
+				set((state) => {
+					if (!state.matches.some(match => match._id === newMatch._id)) {
+						return { matches: [...state.matches, newMatch] };
+					}
+					return state; // No change if duplicate
+				});
+				toast.success("You got a new match!");
+			});
+		} catch (error) {
+			console.log(error);
+		}
+	},
+
+	unsubscribeFromNewMatches: () => {
+		try {
+			const socket = getSocket();
+			socket.off("newMatch");
+		} catch (error) {
+			console.error(error);
+		}
+	},
 }));

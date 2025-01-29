@@ -14,15 +14,15 @@ const Sidebar = () => {
 		getMyMatches();
 	}, [getMyMatches]);
 
+	const uniqueMatches = Array.from(new Set(matches.map(match => match._id)))
+		.map(id => matches.find(match => match._id === id));
+
 	return (
 		<>
 			<div
-				className={`
-		fixed inset-y-0 left-0 z-10 w-64 bg-white shadow-md overflow-hidden transition-transform duration-300
-		 ease-in-out
+				className={`fixed inset-y-0 left-0 z-10 w-64 bg-white shadow-md overflow-hidden transition-transform duration-300 ease-in-out
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
-          lg:translate-x-0 lg:static lg:w-1/4
-		`}
+          lg:translate-x-0 lg:static lg:w-1/4`}
 			>
 				<div className='flex flex-col h-full'>
 					{/* Header */}
@@ -39,10 +39,10 @@ const Sidebar = () => {
 					<div className='flex-grow overflow-y-auto p-4 z-10 relative'>
 						{isLoadingMyMatches ? (
 							<LoadingState />
-						) : matches.length === 0 ? (
+						) : uniqueMatches.length === 0 ? (
 							<NoMatchesFound />
 						) : (
-							matches.map((match) => (
+							uniqueMatches.map((match) => (
 								<Link key={match._id} to={`/chat/${match._id}`}>
 									<div className='flex items-center mb-4 cursor-pointer hover:bg-pink-50 p-2 rounded-lg transition-colors duration-300'>
 										<img
