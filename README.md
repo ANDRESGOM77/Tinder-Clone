@@ -37,6 +37,13 @@ To set up the project locally, follow these steps:
    ```bash
    npm run start
    ```
+## Images
+
+![Log In](Client/public/app1.png)
+![Sign Up](Client/public/app2.png)
+![HomePage](Client/public/app3.png)
+![Profile forms](Client/public/app4.png)
+![Chats](Client/public/app5.png)
 
 ## Usage
 After starting the server, you can access the application at `http://localhost:5000`. Follow the on-screen instructions to create an account and start swiping!
