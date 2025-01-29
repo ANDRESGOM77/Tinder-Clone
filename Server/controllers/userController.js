@@ -2,14 +2,12 @@ import cloudinary from "../config/cloudinary.js";
 import User from "../models/User.js";
 
 export const updateProfile = async (req, res) => {
-
   try {
     const { image, ...otherData } = req.body;
 
     let updatedData = otherData;
 
     if (image) {
-      // base64 format
       if (image.startsWith("data:image")) {
         try {
           const uploadResponse = await cloudinary.uploader.upload(image);
