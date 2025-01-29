@@ -14,7 +14,7 @@ To set up the project locally, follow these steps:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/tinder-clone.git
+   git clone https://github.com/ANDRESGOM77/Tinder-Clone
    cd tinder-clone
    ```
 
